@@ -14,20 +14,19 @@ class TweetsService
      * @param  $tweetUrl | string
      * @return $tweet | object
      */	
-	public function getTweetData($tweetUrl) 
-	{
-		$tweetId = $this->parseIdFromTweetUrl($tweetUrl);
-		
-		$tweet = Tweet::findTweet($tweetId);
-		if ($tweet) {
-			$tweetData = $this->getTweetDataFromApi($tweetId);
-			
-			$attributes = $this->prepareAttributes($tweetData);
-        	return Tweet::create($attributes);
-		} 
-		dd($tweet);
-		return $tweet;
-	}
+    public function getTweetData($tweetUrl) 
+    {
+        $tweetId = $this->parseIdFromTweetUrl($tweetUrl);
+
+        $tweet = Tweet::findTweet($tweetId);
+        if ($tweet) {
+	    $tweetData = $this->getTweetDataFromApi($tweetId);
+            $attributes = $this->prepareAttributes($tweetData);
+            
+	    return Tweet::create($attributes);
+        } 
+        return $tweet;
+    }
 
     /**
      * Fetch tweets collection, updates tweet data using the api and then updates the tweet model.
