@@ -1,0 +1,24 @@
+Firs of all I want to thank you for taking time to review this code.
+
+Below I will explain some important decisions I made durin the implementation of twitter Rest Api. 
+
+I dont have previous experience with Twitter Api's so I took sometime to read the documentation first.
+The documentation was clear and explenatory. After this i took sometime in searching for Twitter Rest Api php libraries,
+and then libraries specific to Laravel 5.
+
+To calculate the reach I would need to get all the retweeters and their followers count.
+At a quick look this 2 endpoints could do the job:
+GET statuses/retweeters/ids
+GET statuses/retweets/:id
+
+Until this point twitter rest api looked good, but after trying this 2 endpoints I realize that they both return the last (max 100) retweets/retweeters
+I thought to do this is other ways using mentions or searching and filtering but its almost imposible to get the correct number of retweets, or fetch the entire collection of retweeters/retweets.
+On the other hand using Twitter Streaming Api, I could track retweets of a tweet in real time but the url needs to be entered asap to prevent untracked retweets.
+Also this has its limitations and premium services like https://gnip.com/ need to be part of the game to be sure that data is consistent.[
+
+What i have implemented is this endpoint GET statuses/retweets/:id, and reach is calculated based on the collection it returns.
+I could also use GET statuses/retweeters/ids for the same porpoise but i would need perform a user/lookup after retriving the collection retweeters ids.
+On the other hand GET statuses/retweets/:id with each retweet object returns also a user object wich has followers count, so this was more comfortable to use
+
+Thank you very much! 
+If you have any furthure questions regarding architectural decisions please contact me at klidi.spiro@gmail.com.
