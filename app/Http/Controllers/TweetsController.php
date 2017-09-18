@@ -12,7 +12,7 @@ class TweetsController extends Controller
      *
      * @var object
      */
-	private $tweetsService;
+    private $tweetsService;
 
     public function __construct(TweetsService $tweetsService)
     {
@@ -24,16 +24,16 @@ class TweetsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-	public function index() 
-	{
-		return view('index');
-	}
+    public function index() 
+    {
+        return view('index');
+    }
 
-	public function getTweetData(TweetsRequest $request) 
-	{
-		$tweet = $this->tweetsService->getTweetData($request->tweet_url);
+    public function getTweetData(TweetsRequest $request) 
+    {
+        $tweet = $this->tweetsService->getTweetData($request->tweet_url);
 
-		return view('index', compact('tweet'));  
-	}
+        return view('index', compact('tweet'));  
+    }
 
 }	
