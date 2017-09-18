@@ -34,17 +34,17 @@ class TweetsService
      * @param  none
      * @return void
      */
-	public function updateTweetsData() 
-	{
-		$tweets = Tweet::all();
-		if ($tweets->count()) {
-			foreach ($tweets as $tweet) {
-				$tweetData  = $this->getTweetDataFromApi($tweet->tweet_id);
-				$attributes = $this->prepareAttributes($tweetData);
-				$tweet->update($attributes);
-			}
-		}	
-	}
+    public function updateTweetsData() 
+    {
+        $tweets = Tweet::all();
+        if ($tweets->count()) {
+            foreach ($tweets as $tweet) {
+                $tweetData  = $this->getTweetDataFromApi($tweet->tweet_id);
+                $attributes = $this->prepareAttributes($tweetData);
+                $tweet->update($attributes);
+           }
+        }	
+    }
 
     /**
      * Parses tweet Url and returns tweet id
@@ -52,36 +52,36 @@ class TweetsService
      * @param  $tweetUrl | string
      * @return tweet id | int
      */
-	private function parseIdFromTweetUrl($tweetUrl)
-	{
-		$path = parse_url($tweetUrl)['path']; 
-		return explode('/', $path)[3];
-	}
+    private function parseIdFromTweetUrl($tweetUrl)
+    {
+        $path = parse_url($tweetUrl)['path']; 
+        return explode('/', $path)[3];
+    }
 
-    /**
-     * Fetch max of 100 most recent retweets of tweet from twitter api
-     *
-     * @param  $tweetId | int
-     * @return $tweed data | array
-     */
-	private function getTweetDataFromApi($tweetId) 
-	{
-		$params = [
-			'id'     => $tweetId,
-			'count'  => 200,
-			'cursor' => 0,
-		];	
+     /**
+      * Fetch max of 100 most recent retweets of tweet from twitter api
+      *
+      * @param  $tweetId | int
+      * @return $tweed data | array
+      */
+     private function getTweetDataFromApi($tweetId) 
+     {
+         $params = [
+             'id'     => $tweetId,
+             'count'  => 200,
+             'cursor' => 0,
+         ];	
 
-		$retweets = Twitter::getRts($tweetId, [ 'count' => 100]);
-		
-		$reach = $this->countReach($retweets);
+         $retweets = Twitter::getRts($tweetId, [ 'count' => 100]);
 
-		return [
-			'tweet' => $retweets[0]->retweeted_status,
-			'reach' => $reach,
-			'retweets_count' => count($retweets)
-		];
-	}
+         $reach = $this->countReach($retweets);
+
+         return [
+             'tweet' => $retweets[0]->retweeted_status,
+             'reach' => $reach,
+             'retweets_count' => count($retweets)
+         ];
+     }
 
     /**
      * Calculate total reach by counting user followers
@@ -89,20 +89,20 @@ class TweetsService
      * @param  $retweets | array
      * @return $reachCount | int
      */
-	private function countReach($retweets) {
-		$reachCount = 0;
-		
-		$originUserFollowers = $retweets[0]->retweeted_status->user->followers_count;
-		$reachCount += $originUserFollowers; 
-		
-		foreach ($retweets as $retweet) {
-			if (!empty($retweet->user)) {
-				$reachCount += $retweet->user->followers_count;
-			}
-		}
-		
-		return $reachCount;
-	}
+    private function countReach($retweets) {
+        $reachCount = 0;
+
+        $originUserFollowers = $retweets[0]->retweeted_status->user->followers_count;
+        $reachCount += $originUserFollowers; 
+
+        foreach ($retweets as $retweet) {
+            if (!empty($retweet->user)) {
+  	        $reachCount += $retweet->user->followers_count;
+	    }
+        }
+
+        return $reachCount;
+    }
 
     /**
      * Prepare attributes for creating new tweet record
