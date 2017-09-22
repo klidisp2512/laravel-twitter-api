@@ -66,12 +66,6 @@ class TweetsService
       */
      private function getTweetDataFromApi($tweetId) 
      {
-         $params = [
-             'id'     => $tweetId,
-             'count'  => 200,
-             'cursor' => 0,
-         ];	
-
          $retweets = Twitter::getRts($tweetId, [ 'count' => 100]);
 
          $reach = $this->countReach($retweets);
